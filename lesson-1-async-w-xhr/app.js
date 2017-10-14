@@ -38,6 +38,7 @@
             responseContainer.insertAdjacentHTML('afterbegin',htmlContent);
         }
         */
+/*
         const articleRequest = new XMLHttpRequest();
         articleRequest.onload = addArticle;
         articleRequest.open('GET', `http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=ccc75b773c1b423c99f4bed905338c33`);
@@ -57,5 +58,29 @@
             }
             responseContainer.insertAdjacentHTML('beforeend',htmlContent);
         }
+         });
+        */
+
+        $.ajax({
+            url: `https://api.unsplash.com/search/photos?page=1&query=${searchedForText}`,
+        
+        headers:
+    {
+            Authorization : 'Client-ID 1ac41a92a154469b7b9a4c201edb906a7427ab329f21aa8f68dd9777038cfc49'
+    }
+}).done(addImage);
+   
+
+
+    function addImage(images) {
+        const firstImage = images.results[0];
+       
+           responseContainer.insertAdjacentHTML('afterbegin',`<figure>
+                    <img src="${firstImage.urls.small}" alt="${searchedForText}">
+                    <figcaption>${searchedForText} by ${firstImage.user.name}</figcaption>
+                    </figure>`);
+        
+    }
     });
+    
 })();

@@ -60,7 +60,7 @@
         }
          });
         */
-
+/** 
         $.ajax({
             url: `https://api.unsplash.com/search/photos?page=1&query=${searchedForText}`,
         
@@ -81,6 +81,20 @@
                     </figure>`);
         
     }
-    });
+  
+    **/
     
+    $.ajax({
+        url: `http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=ccc75b773c1b423c99f4bed905338c33`
+    }).done(addArticle);
+
+    function addArticle(articles){
+        responseContainer.insertAdjacentHTML('beforeend', '<ul>' + articles.response.docs.map(article => `<li class="article">
+               <h2><a href="${article.web_url}">${article.headline.main}</a></h2>
+               <p>${article.snippet}</p>
+               </li>`
+        ).join('') + '</ul>');
+        
+    }
+    });
 })();

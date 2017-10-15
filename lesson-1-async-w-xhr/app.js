@@ -100,6 +100,7 @@
     }
 
     **/
+    /**
     fetch(`https://api.unsplash.com/search/photos?page=1&query=${searchedForText}`, {
             headers: {
                 Authorization: 'Client-ID 1ac41a92a154469b7b9a4c201edb906a7427ab329f21aa8f68dd9777038cfc49'
@@ -128,5 +129,33 @@
             console.log(e);
             responseContainer.insertAdjacentHTML('beforeend', `<p class="network-warning">Oh no! There was an error making a request for the ${part}.</p>`);
         }
+
+        */
+
+        fetch(`http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=ccc75b773c1b423c99f4bed905338c33`)
+        .then(response => response.json())
+        .then(addArticle)
+        .catch(e => requestError(e, 'article'));
+
+        function requestError(e, part) {
+            console.log(e);
+            responseContainer.insertAdjacentHTML('beforeend', `<p class="network-warning">Oh no! There was an error making a request for the ${part}.</p>`);
+         }
+         
+         function addArticle(data){
+             let htmlContent = '';
+
+             if (data.response && data.response.docs && data.response.docs.length > 1) {
+         htmlContent = '<ul>' + data.response.docs.map(article => `<li class="article">
+               <h2><a href="${article.web_url}">${article.headline.main}</a></h2>
+               <p>${article.snippet}</p>
+               </li>`
+            ).join('') + '</ul>';
+        } else{
+            htmlContent = '<div class="error-no-articles">No articles vailable</div>';
+        }
+        responseContainer.insertAdjacentHTML('beforeend', htmlContent);
+    }
+
     });
 })();
